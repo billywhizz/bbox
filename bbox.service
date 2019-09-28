@@ -1,0 +1,17 @@
+[Unit]
+Description=BBox Player
+Wants=default.target
+After=default.target
+
+[Service]
+Environment=DISPLAY=:0.0
+Environment=XAUTHORITY=/home/pi/.Xauthority
+ExecStart=/bin/bash /source/bbox/start.sh
+#ExecStart=/usr/local/bin/node /source/bbox/index.js
+WorkingDirectory=/source/bbox
+StandardOutput=syslog
+StandardError=syslog
+Restart=on-abort
+
+[Install]
+WantedBy=default.target
