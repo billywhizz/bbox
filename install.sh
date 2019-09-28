@@ -1,3 +1,4 @@
+npm install --production
 systemctl --user disable bbox.service
 cp bbox.service ~/.config/systemd/user/
 systemctl --user enable bbox.service

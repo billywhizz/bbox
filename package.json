@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": false,
   "dependencies": {
+    "byline": "5.0.0",
     "chrome-launcher": "0.11.2",
     "chrome-remote-interface": "0.28.0"
   }
