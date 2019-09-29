@@ -7,7 +7,7 @@ const readdirAsync = promisify(readdir)
 const statAsync = promisify(stat)
 
 const rxId = /.+((?:b|p|m)0[\d\w]{6}).+?/
-const homeDir = '/media/andrew/_blue1/bbc'
+const homeDir = '/media/bbc'
 
 async function loadIfExists(fileName, format = 'json') {
   try {
@@ -24,32 +24,35 @@ async function loadIfExists(fileName, format = 'json') {
 async function process(path, db) {
   const listing = await readdirAsync(path)
   for (const entry of listing) {
-    const fileName = join(path, entry)
-    const fileStat = await statAsync(fileName)
-    if (fileStat.isFile()) {
-      const ext = extname(entry)
-      const name = entry.replace(ext, '')
-      if (ext === '.mp4' || ext === '.flv') {
-        const record = { path: fileName.replace(homeDir, ''), size: fileStat.size, name, subtitles: join(path, `${name}.srt`) }
-        const subs = await loadIfExists(record.subtitles, 'text')
-        if (!subs) delete record.subtitles
-        const info = await loadIfExists(`${homeDir}/.bbc/${name}.info.json`)
-        if (info) {
-          const { programme } = info
-          const { pid } = programme
-          record.pid = pid
-        } else {
-          const match = name.match(rxId)
-          if (match && match.length > 1) {
-            const [ , pid ] = match
+    console.log(entry)
+    if (entry !== 'lost+found') {
+      const fileName = join(path, entry)
+      const fileStat = await statAsync(fileName)
+      if (fileStat.isFile()) {
+        const ext = extname(entry)
+        const name = entry.replace(ext, '')
+        if (ext === '.mp4' || ext === '.flv') {
+          const record = { path: fileName, size: fileStat.size, name, subtitles: join(path, `${name}.srt`) }
+          const subs = await loadIfExists(record.subtitles, 'text')
+          if (!subs) delete record.subtitles
+          const info = await loadIfExists(`${homeDir}/.bbc/${name}.info.json`)
+          if (info) {
+            const { programme } = info
+            const { pid } = programme
             record.pid = pid
+          } else {
+            const match = name.match(rxId)
+            if (match && match.length > 1) {
+              const [ , pid ] = match
+              record.pid = pid
+            }
           }
+          db.push(record)
         }
-        db.push(record)
+      } else if (fileStat.isDirectory()) {
+        console.log(`${join(path, entry)} is a directory`)
+        await process(join(path, entry), db)
       }
-    } else if (fileStat.isDirectory()) {
-      console.log(`${join(path, entry)} is a directory`)
-      await process(join(path, entry), db)
     }
   }
 }
@@ -57,11 +60,11 @@ async function process(path, db) {
 async function run() {
   const db = []
   await process(homeDir, db)
-	await writeFileAsync('./web/bbc.json', JSON.stringify(db, null, '  '))
+	await writeFileAsync('./bbc.json', JSON.stringify(db, null, '  '))
   console.log(db.length)
   const noPids = db.filter(v => !v.pid)
   console.log(noPids.length)
-	await writeFileAsync('./web/noPids.json', JSON.stringify(noPids, null, '  '))
+	await writeFileAsync('./noPids.json', JSON.stringify(noPids, null, '  '))
 }
 
 run().catch(err => console.error(err))

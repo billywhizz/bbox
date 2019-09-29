@@ -18,6 +18,7 @@ async function run() {
     record.tags = meta.categories.toLowerCase()
     record.category = meta.category.toLowerCase()
     record.channel = meta.channel
+    record.duration = meta.duration
     record.description = meta.desc
     record.episode = meta.episode === '-' ? null: meta.episode
     record.broadcast = meta.firstbcastdate

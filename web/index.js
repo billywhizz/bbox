@@ -10,6 +10,7 @@ function highlight(v) {
   document.body.children[vpos].style.background = 'rgba(0, 0, 0, 0.6)'
   document.body.children[v].style.backgroundColor = '#f54997'
   vpos = v
+  localStorage.setItem("vpos", v)
 }
 
 function poll() {
@@ -109,8 +110,8 @@ function displayPage() {
     } else {
       spBroadcast.innerText = ''
     }
-
   }
+  localStorage.setItem("page", page)
 }
 
 function setupScreen() {
@@ -222,8 +223,8 @@ function sortList(a, b) {
 
 function loadProgrammes(json) {
   db = json
-  vpos = 0
-  page = 0
+  vpos = localStorage.getItem("vpos") || 0
+  page = localStorage.getItem("page") || 0
   pages = Math.floor(db.length / itemsPerPage)
   db.sort(sortList)
   setupScreen()
@@ -253,6 +254,6 @@ function changeBackground() {
   document.body.style.backgroundImage = `url('${backgrounds[currentBackground++]}')`
 }
 
-setInterval(() => changeBackground(), 10000)
+//setInterval(() => changeBackground(), 10000)
 
 const load = () => loadJSON("bbc.json", json => loadProgrammes(json))

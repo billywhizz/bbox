@@ -1,13 +1,14 @@
 const { spawn } = require('child_process')
+const { join } = require('path')
 
-//const homeDir = '/media/blue1/bbc/2019-09'
-const homeDir = '/media/andrew/_blue1/bbc/2019-09'
+const homeDir = '/media/bbc'
+const pwd = join(__dirname, '../')
 
 function download(pid) {
 	const script = `
 PID=${pid}
 echo getting $PID
-docker run -t --rm -v $(pwd)/downloads/config:/data/config -v ${homeDir}:/data/output barwell/get-iplayer ./get_iplayer --ffmpeg /usr/bin/ffmpeg --atomicparsley /usr/bin/AtomicParsley --profile-dir /data/config --output /data/output --subtitles --force --pid $PID 1>$PID.log 2>&1
+docker run -t --rm -v ${pwd}/config:/data/config -v ${homeDir}:/data/output barwell/get-iplayer ./get_iplayer --ffmpeg /usr/bin/ffmpeg --atomicparsley /usr/bin/AtomicParsley --profile-dir /data/config --output /data/output --subtitles --force --pid $PID 1>$PID.log 2>&1
 `
 	return new Promise((ok, fail) => {
 		const child = spawn('/bin/sh', [ '-c', script ])
@@ -25,8 +26,6 @@ async function run(args) {
   const match = url.match(/https?:\/\/www.bbc.co.uk\/iplayer\/episode\/(.+)\/(.+)/)
   if (match && match.length === 3) {
     const [ , pid, name ] = match
-    console.log(pid)
-    console.log(name)
     await download(pid)
   }
 }

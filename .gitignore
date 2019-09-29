@@ -3,3 +3,6 @@ scratch
 downloads
 db.json
 web/bbc.json
+*.log
+Cache
+Default
