@@ -72,6 +72,7 @@ function displayPage() {
     const spCategory = div.children[5]
     const spTags = div.children[6]
     const spBroadcast = div.children[7]
+    const spDuration = div.children[8]
     if (index > db.length -1) {
       spTitle.innerText = ''
       spSubTitle.innerText = ''
@@ -81,8 +82,9 @@ function displayPage() {
       spChannel.innerText = ''
       spTags.innerText = ''
       spBroadcast.innerText = ''
+      spDuration.innerText = ''
     } else {
-      const { name, size, path, brand, tags, category, channel, description, episode, broadcast, title, type, thumbnail } = db[index]
+      const { name, size, path, brand, duration, tags, category, channel, description, episode, broadcast, title, type, thumbnail } = db[index]
       if (episode) {
         spTitle.innerText = `${name}`
         spSubTitle.innerText = `${episode}`
@@ -122,15 +124,22 @@ function displayPage() {
       } else {
         spBroadcast.innerText = ''
       }
+      if (duration) {
+        spDuration.innerText = `${Math.ceil(duration / 60)} min`
+      } else {
+        spDuration.innerText = ''
+      }
     }
   }
+  const spPage = document.body.children[itemsPerPage]
+  spPage.innerText = `${page + 1} / ${pages}`
   localStorage.setItem("page", page)
 }
 
 function setupScreen() {
   document.body.innerHTML = ""
-  const itemHeight = Math.floor((window.innerHeight - 8) / itemsPerPage) - 8
-  let top = 8
+  const itemHeight = Math.floor((window.innerHeight - 64) / itemsPerPage) - 8
+  let top = 64
   for (let i = 0; i < itemsPerPage; i++) {
     const div = document.createElement('div')
     div.style.color = 'white'
@@ -160,7 +169,7 @@ function setupScreen() {
     spSubTitle.style.position = 'absolute'
     spSubTitle.style.left = '200px'
     spSubTitle.style.top = '44px'
-    spSubTitle.style.color = 'lightgray'
+    spSubTitle.style.color = 'yellow'
     spSubTitle.style.width = '792px'
     spSubTitle.style.fontSize = '32px'
     spSubTitle.style.textOverflow = 'ellipsis'
@@ -224,8 +233,26 @@ function setupScreen() {
     spBroadcast.style.textAlign = 'right'
     div.appendChild(spBroadcast)
 
+    const spDuration = document.createElement('span')
+    spDuration.style.position = 'absolute'
+    spDuration.style.right = '600px'
+    spDuration.style.width = '180px'
+    spDuration.style.top = '8px'
+    spDuration.style.fontSize = '24px'
+    spDuration.style.textAlign = 'right'
+    div.appendChild(spDuration)
+
     top += itemHeight + 8
   }
+  const spPage = document.createElement('div')
+  spPage.style.position = 'absolute'
+  spPage.style.right = '16px'
+  spPage.style.top = '8px'
+  spPage.style.fontSize = '32px'
+  spPage.style.textAlign = 'right'
+  spPage.style.color = 'white'
+  //spPage.style.background = 'rgba(0, 0, 0, 0.6)'
+  document.body.appendChild(spPage)
 }
 
 function sortList(a, b) {
@@ -242,7 +269,7 @@ function loadProgrammes(json) {
   db.sort(sortList)
   setupScreen()
   displayPage()
-  highlight(0)
+  highlight(vpos)
 }
 
 function loadJSON(file, callback) {

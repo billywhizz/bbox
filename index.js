@@ -3,19 +3,23 @@
 const { Launcher } = require('chrome-launcher')
 const NodeCEC = require('./nodecec')
 const chrome = require('chrome-remote-interface')
+const { join } = require('path')
 const { spawn } = require('child_process')
 const { promisify } = require('util')
 const { readFile, writeFile } = require('fs')
 const readFileAsync = promisify(readFile)
 const writeFileAsync = promisify(writeFile)
+const repl = require('repl')
 
 let omx
 let cec
 let timer
 
+// todo = look for both
+//const chromePath = '/usr/bin/google-chrome-stable'
 const chromePath = '/usr/bin/chromium-browser'
-const homeDir = "/source/bbox/web"
-const startingUrl = `file://${homeDir}/index.html`
+const startingUrl = `file://${join(__dirname, 'web', 'index.html')}`
+console.log(startingUrl)
 
 const chromeFlags = [
   '--kiosk',
@@ -34,8 +38,8 @@ const chromeFlags = [
   '--disable-restore-session-state',
   '--disable-session-crashed-bubble',
   '--disable-features=TranslateUI',
-  '--disk-cache-dir=/source/bbox/Cache',
-  '--user-data-dir=/source/bbox/Default'
+  `--disk-cache-dir=${join(__dirname, 'Cache')}`,
+  `--user-data-dir=${join(__dirname, 'Default')}`
 ]
 
 function initCEC(protocol) {
@@ -142,7 +146,6 @@ async function run() {
       try {
         const pending = await Runtime.evaluate({ expression: 'poll()', awaitPromise: true, returnByValue: true })
         const { result } = pending
-        console.dir(result)
         if (result.value && result.value.path) {
           if (omx) omx.stdin.write('q')
           // TODO: wait for quit
@@ -160,7 +163,8 @@ async function run() {
       } catch (err) {
         console.log(err.message)
       }
-    }, 1000)
+    }, 100)
+    //await Page.loadEventFired()
     await Runtime.evaluate({ expression: 'load()', awaitPromise: true, returnByValue: true })
     initCEC(client)
     let shuttingDown = false
@@ -173,15 +177,23 @@ async function run() {
       if (launcher) launcher.kill()
       clearTimeout(timer)
       setTimeout(async () => {
-        const text = await readFileAsync('./Default/Default/Preferences')
-        const json = JSON.parse(text.toString('utf8'))
-        json.profile['exit_type'] = 'Normal'
-        await writeFileAsync('./Default/Default/Preferences', JSON.stringify(json))
+        //const text = await readFileAsync('./Default/Default/Preferences')
+        //const json = JSON.parse(text.toString('utf8'))
+        //json.profile['exit_type'] = 'Normal'
+        //await writeFileAsync('./Default/Default/Preferences', JSON.stringify(json))
         process.exit(0)
-      }, 3000)
+      }, 5000)
     }
     process.on('SIGTERM', () => shutdown())
     process.on('SIGINT', () => shutdown())
+/*
+    const rl = repl.start('#bbc ')
+    rl.context.evaluate = async s => {
+      const json = await Runtime.evaluate({ expression: s, awaitPromise: true, returnByValue: true })
+      if (!json.result) return null
+      return json.result
+    }
+*/
   } catch (err) {
     console.error('error opening page')
     if (client) client.close()
