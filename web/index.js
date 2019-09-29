@@ -37,7 +37,7 @@ function down() {
 
 function left() {
   if (page === 0) {
-    page = pages
+    page = pages - 1
     displayPage()
     return
   }
@@ -72,43 +72,56 @@ function displayPage() {
     const spCategory = div.children[5]
     const spTags = div.children[6]
     const spBroadcast = div.children[7]
-    const { name, size, path, brand, tags, category, channel, description, episode, broadcast, title, type, thumbnail } = db[index]
-    if (episode) {
-      spTitle.innerText = `${name}`
-      spSubTitle.innerText = `${episode}`
-    } else {
-      spTitle.innerText = `${title}`
+    if (index > db.length -1) {
+      spTitle.innerText = ''
       spSubTitle.innerText = ''
-    }
-    if (thumbnail) {
-      thumb.src = thumbnail
-    } else {
-      thumb.src = ''
-    }
-    if (description) {
-      spDesc.innerText = description
-    } else {
+      thumb.style.display = 'none'
       spDesc.innerText = ''
-    }
-    if (category) {
-      spCategory.innerText = category
-    } else {
       spCategory.innerText = ''
-    }
-    if (channel) {
-      spChannel.innerText = channel
-    } else {
       spChannel.innerText = ''
-    }
-    if (tags) {
-      spTags.innerText = tags
-    } else {
       spTags.innerText = ''
-    }
-    if (broadcast) {
-      spBroadcast.innerText = broadcast
-    } else {
       spBroadcast.innerText = ''
+    } else {
+      const { name, size, path, brand, tags, category, channel, description, episode, broadcast, title, type, thumbnail } = db[index]
+      if (episode) {
+        spTitle.innerText = `${name}`
+        spSubTitle.innerText = `${episode}`
+      } else {
+        spTitle.innerText = `${title}`
+        spSubTitle.innerText = ''
+      }
+      if (thumbnail) {
+        thumb.src = thumbnail
+        thumb.style.display = 'block'
+      } else {
+        thumb.src = ''
+        thumb.style.display = 'none'
+      }
+      if (description) {
+        spDesc.innerText = description
+      } else {
+        spDesc.innerText = ''
+      }
+      if (category) {
+        spCategory.innerText = category
+      } else {
+        spCategory.innerText = ''
+      }
+      if (channel) {
+        spChannel.innerText = channel
+      } else {
+        spChannel.innerText = ''
+      }
+      if (tags) {
+        spTags.innerText = tags
+      } else {
+        spTags.innerText = ''
+      }
+      if (broadcast) {
+        spBroadcast.innerText = broadcast
+      } else {
+        spBroadcast.innerText = ''
+      }
     }
   }
   localStorage.setItem("page", page)
@@ -223,9 +236,9 @@ function sortList(a, b) {
 
 function loadProgrammes(json) {
   db = json
-  vpos = localStorage.getItem("vpos") || 0
-  page = localStorage.getItem("page") || 0
-  pages = Math.floor(db.length / itemsPerPage)
+  vpos = parseInt(localStorage.getItem("vpos") || 0, 10)
+  page = parseInt(localStorage.getItem("page") || 0, 10)
+  pages = Math.ceil(db.length / itemsPerPage)
   db.sort(sortList)
   setupScreen()
   displayPage()
