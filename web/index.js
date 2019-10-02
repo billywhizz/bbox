@@ -84,7 +84,7 @@ function displayPage() {
       spBroadcast.innerText = ''
       spDuration.innerText = ''
     } else {
-      const { name, size, path, brand, duration, tags, category, channel, description, episode, broadcast, title, type, thumbnail } = db[index]
+      const { name, size, path, brand, duration, tags, category, channel, description, episode, broadcast, title, thumbnail } = db[index]
       if (episode) {
         spTitle.innerText = `${name}`
         spSubTitle.innerText = `${episode}`
@@ -251,14 +251,7 @@ function setupScreen() {
   spPage.style.fontSize = '32px'
   spPage.style.textAlign = 'right'
   spPage.style.color = 'white'
-  //spPage.style.background = 'rgba(0, 0, 0, 0.6)'
   document.body.appendChild(spPage)
-}
-
-function sortList(a, b) {
-  if (a.title.toLowerCase() < b.title.toLowerCase()) return -1
-  if (a.title.toLowerCase() > b.title.toLowerCase()) return 1
-  return 0
 }
 
 function loadProgrammes(json) {
@@ -266,7 +259,6 @@ function loadProgrammes(json) {
   vpos = parseInt(localStorage.getItem("vpos") || 0, 10)
   page = parseInt(localStorage.getItem("page") || 0, 10)
   pages = Math.ceil(db.length / itemsPerPage)
-  db.sort(sortList)
   setupScreen()
   displayPage()
   highlight(vpos)

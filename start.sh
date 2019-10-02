@@ -4,4 +4,4 @@ xset s noblank
 xset s off
 xset -dpms
 unclutter -idle 0.5 &
-node index.js
+rm -fr Default && node index.js

@@ -21,7 +21,7 @@ function killGetiPlayer() {
 }
 
 function runGetiPlayer() {
-	const script = 'docker run -d --rm --name get-iplayer barwell/get-iplayer /bin/sh'
+	const script = 'docker run -d --rm --name get-iplayer get-iplayer /bin/watch -n 1 /bin/true'
 	return new Promise((ok, fail) => {
 		const child = spawn('/bin/sh', [ '-c', script ])
     const chunks = []
@@ -58,16 +58,11 @@ function parseLine(line) {
 }
 
 async function run() {
-  const docker = runGetiPlayer()
+  const docker = await runGetiPlayer()
   await sleep(3000)
-  const fileName = join(__dirname, './bbc.json')
-  const dbName = join(__dirname, './db.json')
-  const text = await readFileAsync(fileName)
+  const dbName = join(__dirname, '../db.json')
+  const text = await readFileAsync(dbName)
   const bbc = JSON.parse(text)
-  const timer = setInterval(async () => {
-    await writeFileAsync(fileName, JSON.stringify(bbc, null, '  '))
-    console.log('saved')
-  }, 5000)
   for (const record of bbc) {
     if (record.pid && !record.info) {
       record.info = await getInfo(record.pid)
@@ -77,7 +72,6 @@ async function run() {
       record.info.split('\n').map(parseLine).filter(v => v.length).filter(v => !v[0].match(/INFO|WARNING/)).forEach(v => (record.meta[v[0]] = v[1]))
     }
   }
-  clearTimeout(timer)
 	await writeFileAsync(dbName, JSON.stringify(bbc, null, '  '))
   let output = await killGetiPlayer()
   console.log(output)
