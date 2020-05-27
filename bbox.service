@@ -6,9 +6,8 @@ After=default.target
 [Service]
 Environment=DISPLAY=:0.0
 Environment=XAUTHORITY=/home/pi/.Xauthority
-ExecStart=/bin/bash /source/bbox/start.sh
-#ExecStart=/usr/local/bin/node /source/bbox/index.js
-WorkingDirectory=/source/bbox
+ExecStart=/bin/bash /home/pi/bbox/start.sh
+WorkingDirectory=/home/pi/bbox
 StandardOutput=syslog
 StandardError=syslog
 Restart=on-abort

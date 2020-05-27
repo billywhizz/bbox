@@ -26,7 +26,7 @@ const chromeFlags = [
   '--allow-file-access-from-files',
   '--window-size=1920,1080',
   '--window-position=0,0',
-  '--disable-web-security',
+//  '--disable-web-security',
   '--disable-gpu',
   '--noerrdialogs',
   '--noerrors',
@@ -41,6 +41,8 @@ const chromeFlags = [
   `--disk-cache-dir=${join(__dirname, 'Cache')}`,
   `--user-data-dir=${join(__dirname, 'Default')}`
 ]
+
+//const chromeFlags = [ '--disable-infobars', '--kiosk' ]
 
 function initCEC(protocol) {
   const { Runtime } = protocol
@@ -120,7 +122,8 @@ async function run() {
       startingUrl,
       envVars: { DISPLAY: ':0' }, 
       chromeFlags,
-      handleSIGINT: false
+      handleSIGINT: false,
+      ignoreDefaultFlags: true
     })
     await launcher.launch()
     launcher.chrome.on('close', () => {

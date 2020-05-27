@@ -291,6 +291,6 @@ document.addEventListener('keyup', e => {
   if (keyEvents[e.key]) keyEvents[e.key]()
 })
 
-setInterval(() => changeBackground(), 10000)
+//setInterval(() => changeBackground(), 10000)
 
 const load = () => loadJSON("bbc.json", json => loadProgrammes(json))
