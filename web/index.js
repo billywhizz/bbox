@@ -244,6 +244,7 @@ function setupScreen() {
 
     top += itemHeight + 8
   }
+
   const spPage = document.createElement('div')
   spPage.style.position = 'absolute'
   spPage.style.right = '16px'
