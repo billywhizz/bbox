@@ -286,6 +286,11 @@ function changeBackground() {
   document.body.style.backgroundImage = `url('${backgrounds[currentBackground++]}')`
 }
 
-//setInterval(() => changeBackground(), 10000)
+const keyEvents = { 'ArrowUp': up, 'ArrowDown': down, 'ArrowLeft': left, 'ArrowRight': right }
+document.addEventListener('keyup', e => {
+  if (keyEvents[e.key]) keyEvents[e.key]()
+})
+
+setInterval(() => changeBackground(), 10000)
 
 const load = () => loadJSON("bbc.json", json => loadProgrammes(json))

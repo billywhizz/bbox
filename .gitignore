@@ -1,8 +1,9 @@
 node_modules
 scratch
 downloads
-db.json
+bbc.json
 web/bbc.json
 *.log
 Cache
 Default
+bbc.txt
