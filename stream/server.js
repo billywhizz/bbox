@@ -5,9 +5,9 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-const videoFilePath = '/media/blue1/bbc/2020-04/The_Andrew_Marr_Show_-_2020-05-17_m000jbq9_original.mp4';
-
-app.get('/video', (req, res) => {
+app.get('*', (req, res) => {
+  console.log(req.path)
+  const videoFilePath = req.path
   const fileSize = fs.statSync(videoFilePath).size;
   const { range } = req.headers;
   const [s, e] = range.replace('bytes=', '').split('-');

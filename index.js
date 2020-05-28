@@ -3,6 +3,9 @@ const NodeCEC = require('./nodecec')
 const chrome = require('chrome-remote-interface')
 const { join } = require('path')
 const { spawn } = require('child_process')
+const fs = require('fs');
+const path = require('path');
+const express = require('express');
 
 let omx
 let cec
@@ -99,6 +102,7 @@ function initCEC(protocol) {
   })
   cec.start()
 }
+
 async function run() {
   let launcher
   let client
@@ -162,6 +166,11 @@ async function run() {
     }
     process.on('SIGTERM', () => shutdown())
     process.on('SIGINT', () => shutdown())
+
+    app.listen(8080, '0.0.0.0', () => {
+      console.log('Server is up...');
+    });
+
   } catch (err) {
     if (client) client.close()
     if (launcher) launcher.kill()
@@ -169,5 +178,26 @@ async function run() {
     throw(err)
   }
 }
+
+const app = express();
+
+app.use(express.static(path.join(__dirname, 'web')));
+
+app.get('*', (req, res) => {
+  console.log(req.path)
+  const videoFilePath = req.path
+  const fileSize = fs.statSync(videoFilePath).size;
+  const { range } = req.headers;
+  const [s, e] = range.replace('bytes=', '').split('-');
+  const start = Number(s);
+  const end = Number(e) || fileSize - 1;
+  res.append('Accept-Ranges', 'bytes');
+  res.append('Content-Range', `bytes ${start}-${end}/${fileSize}`);
+  res.append('Content-Length', end - start + 1);
+  res.append('Content-Type', 'video/mp4');
+  res.status(206);
+  const fileStream = fs.createReadStream(videoFilePath, { start, end });
+  fileStream.pipe(res);
+});
 
 run().catch(err => console.error(err))

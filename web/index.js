@@ -60,13 +60,18 @@ function select() {
   pending = db[index]
 }
 
+function playVideo (path) {
+  window.location.href = `/${path}`
+}
+
 function displayPage() {
   for (let i = 0; i < itemsPerPage; i++) {
     const index = (page * itemsPerPage) + i
     const div = document.body.children[i]
     const spTitle = div.children[0]
     const spSubTitle = div.children[1]
-    const thumb = div.children[2]
+    const anchor = div.children[2]
+    const thumb = anchor.children[0]
     const spDesc = div.children[3]
     const spChannel = div.children[4]
     const spCategory = div.children[5]
@@ -85,6 +90,7 @@ function displayPage() {
       spDuration.innerText = ''
     } else {
       const { name, size, path, brand, duration, tags, category, channel, description, episode, broadcast, title, thumbnail } = db[index]
+      anchor.onclick = () => playVideo(path)
       if (episode) {
         spTitle.innerText = `${name}`
         spSubTitle.innerText = `${episode}`
@@ -177,13 +183,16 @@ function setupScreen() {
     spSubTitle.style.whiteSpace = 'nowrap'
     div.appendChild(spSubTitle)
 
+    const anchor = document.createElement('a')
+    anchor.href = '#'
+    anchor.style.position = 'absolute'
+    anchor.style.left = '8px'
+    anchor.style.top = '8px'
+    div.appendChild(anchor)
     const thumb = document.createElement('img')
-    thumb.style.position = 'absolute'
-    thumb.style.left = '8px'
-    thumb.style.top = '8px'
     thumb.style.width = '184px'
     thumb.style.height = `${itemHeight - 16}px`
-    div.appendChild(thumb)
+    anchor.appendChild(thumb)
 
     const spDesc = document.createElement('span')
     spDesc.style.position = 'absolute'
