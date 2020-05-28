@@ -61,7 +61,7 @@ function select() {
 }
 
 function playVideo (path) {
-  window.location.href = `/${path}`
+  window.location.href = `${window.location.origin}${path}`
 }
 
 function displayPage() {

@@ -18,7 +18,7 @@ async function run() {
   for (const key of Object.keys(bbc)) {
     const { path } = bbc[key]
     if (path.indexOf('/media/blue1/') > -1) {
-      if (!pids[bbc[key].pid]) pids[bbc[key].pid] = bbc[key]
+      pids[bbc[key].pid] = bbc[key]
     } else if (path.indexOf('/media/disk2/') > -1) {
       if (!pids[bbc[key].pid]) pids[bbc[key].pid] = bbc[key]
     }
