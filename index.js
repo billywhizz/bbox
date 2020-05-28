@@ -188,11 +188,15 @@ app.get('*', (req, res) => {
   const videoFilePath = req.path
   const fileSize = fs.statSync(videoFilePath).size;
   const { range } = req.headers;
-  const [s, e] = range.replace('bytes=', '').split('-');
-  const start = Number(s);
-  const end = Number(e) || fileSize - 1;
+  let start = 0
+  let end = fileSize - 1
+  if (range) {
+    const [s, e] = range.replace('bytes=', '').split('-');
+    start = Number(s);
+    end = Number(e) || fileSize - 1;
+    res.append('Content-Range', `bytes ${start}-${end}/${fileSize}`);
+  }
   res.append('Accept-Ranges', 'bytes');
-  res.append('Content-Range', `bytes ${start}-${end}/${fileSize}`);
   res.append('Content-Length', end - start + 1);
   res.append('Content-Type', 'video/mp4');
   res.status(206);
