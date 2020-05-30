@@ -28,7 +28,9 @@ const chromeFlags = [
   '--fast',
   '--fast-start',
   '--disable-infobars',
-  '--check-for-update-interval=604800',
+//  '--check-for-update-interval=604800',
+  '--check-for-update-interval=1',
+  '--simulate-critical-update',
   '--disable-restore-session-state',
   '--disable-session-crashed-bubble',
   '--disable-features=TranslateUI'
