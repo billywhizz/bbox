@@ -3,9 +3,9 @@ const NodeCEC = require('./nodecec')
 const chrome = require('chrome-remote-interface')
 const { join } = require('path')
 const { spawn } = require('child_process')
-const fs = require('fs');
-const path = require('path');
-const express = require('express');
+const fs = require('fs')
+const path = require('path')
+const express = require('express')
 
 let omx
 let cec
@@ -31,8 +31,6 @@ const chromeFlags = [
   '--disable-restore-session-state',
   '--disable-session-crashed-bubble',
   '--disable-features=TranslateUI'
-//  `--disk-cache-dir=${join(__dirname, 'Cache')}`,
-//  `--user-data-dir=${join(__dirname, 'Default')}`
 ]
 
 function initCEC(protocol) {
@@ -168,7 +166,7 @@ async function run() {
     process.on('SIGINT', () => shutdown())
 
     app.listen(8080, '0.0.0.0', () => {
-      console.log('Server is up...');
+      console.log('Server is up...')
     });
 
   } catch (err) {
@@ -179,29 +177,28 @@ async function run() {
   }
 }
 
-const app = express();
+const app = express()
 
-app.use(express.static(path.join(__dirname, 'web')));
+app.use(express.static(path.join(__dirname, 'web')))
 
 app.get('*', (req, res) => {
-  console.log(req.path)
   const videoFilePath = req.path
-  const fileSize = fs.statSync(videoFilePath).size;
-  const { range } = req.headers;
+  const fileSize = fs.statSync(videoFilePath).size
+  const { range } = req.headers
   let start = 0
   let end = fileSize - 1
   if (range) {
-    const [s, e] = range.replace('bytes=', '').split('-');
-    start = Number(s);
-    end = Number(e) || fileSize - 1;
-    res.append('Content-Range', `bytes ${start}-${end}/${fileSize}`);
+    const [s, e] = range.replace('bytes=', '').split('-')
+    start = Number(s)
+    end = Number(e) || fileSize - 1
+    res.append('Content-Range', `bytes ${start}-${end}/${fileSize}`)
   }
-  res.append('Accept-Ranges', 'bytes');
-  res.append('Content-Length', end - start + 1);
-  res.append('Content-Type', 'video/mp4');
-  res.status(206);
-  const fileStream = fs.createReadStream(videoFilePath, { start, end });
-  fileStream.pipe(res);
-});
+  res.append('Accept-Ranges', 'bytes')
+  res.append('Content-Length', end - start + 1)
+  res.append('Content-Type', 'video/mp4')
+  res.status(206)
+  const fileStream = fs.createReadStream(videoFilePath, { start, end })
+  fileStream.pipe(res)
+})
 
 run().catch(err => console.error(err))
