@@ -5,14 +5,14 @@ const readFileAsync = promisify(readFile)
 const writeFileAsync = promisify(writeFile)
 const { spawn } = require('child_process')
 
-const bbc = require('./pi/scripts/bbc.json')
+const bbc = require('./bbc.json')
 
 const pids = Object.keys(bbc).map(key => bbc[key].pid).reduce((keys, v) => {
   keys[v] = true
   return keys
 }, {})
 
-const homeDir = '/media/andrew/_blue1/bbc/2020-04'
+const homeDir = '/media/seagate/bbc'
 const pwd = join(__dirname, './')
 
 function download(pid) {

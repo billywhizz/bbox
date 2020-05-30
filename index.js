@@ -30,9 +30,9 @@ const chromeFlags = [
   '--disable-infobars',
   '--disable-restore-session-state',
   '--disable-session-crashed-bubble',
-  '--disable-features=TranslateUI',
-  `--disk-cache-dir=${join(__dirname, 'Cache')}`,
-  `--user-data-dir=${join(__dirname, 'Default')}`
+  '--disable-features=TranslateUI'
+//  `--disk-cache-dir=${join(__dirname, 'Cache')}`,
+//  `--user-data-dir=${join(__dirname, 'Default')}`
 ]
 
 function initCEC(protocol) {

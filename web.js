@@ -19,6 +19,8 @@ async function run() {
     const { path } = bbc[key]
     if (path.indexOf('/media/blue1/') > -1) {
       pids[bbc[key].pid] = bbc[key]
+    } else if (path.indexOf('/media/seagate/') > -1) {
+      pids[bbc[key].pid] = bbc[key]
     } else if (path.indexOf('/media/disk2/') > -1) {
       if (!pids[bbc[key].pid]) pids[bbc[key].pid] = bbc[key]
     }

@@ -1,6 +1,2 @@
+sudo cp autostart /etc/xdg/openbox/autostart
 npm install --production
-systemctl --user disable bbox.service
-cp bbox.service ~/.config/systemd/user/
-systemctl --user enable bbox.service
-systemctl --user start bbox.service
-systemctl --user status bbox.service
