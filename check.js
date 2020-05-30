@@ -1,26 +1,5 @@
 const bbc = require('./bbc.json')
 
-function findByPID(pid) {
-  const found = Object.keys(bbc).map(k => bbc[k]).filter(v => v.pid === pid).filter(v => v.meta && v.meta.title && v.meta.name !== 'get_iplayer')
-  if (found && found.length) {
-    return found[0]
-  }
-}
-
-function fixup(path, pid) {
-  const record = bbc[path]
-  record.pid = pid
-  if (!record.meta || (record.meta && !record.meta.title) || (record.meta && record.meta.name === 'get_iplayer')) {
-    delete record.info
-    delete record.meta
-    const found = findByPID(pid)
-    if (found) {
-      record.meta = found.meta
-      record.info = found.info
-    }
-  }
-}
-
 let missingPIDs = Object.keys(bbc).map(k => bbc[k]).filter(v => !v.pid).map(v => v.path).length
 console.log(`Missing PIDs: ${missingPIDs}`)
 let missingMeta = Object.keys(bbc).map(k => bbc[k]).filter(record => !record.meta || (record.meta && !record.meta.title) || (record.meta && record.meta.title === 'get_iplayer'))

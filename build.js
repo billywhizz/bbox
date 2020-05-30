@@ -13,8 +13,6 @@ const rxExif = /[ /]/g
 
 const sleep = ms => new Promise(ok => setTimeout(ok, ms))
 
-const isUpperCase = (string) => /^[A-Z]*$/.test(string)
-
 function parseLine(line) {
   const i = line.indexOf(':')
   if (i < 0) return []
@@ -225,13 +223,6 @@ async function run(args) {
   const [ homeDir ] = args
   let db = await loadIfExists('./bbc.json')
   if (!db) db = {}
-  // * giga *
-  // /media/green2/bbc
-  // /media/edge1/storage/bbc
-  // /media/edge1/storage4/bbc
-  // * home *
-  // /media/blue1/bbc
-  // /media/disk2/storage2/bbc
   await generate(homeDir, homeDir, db)
   await writeFileAsync('./bbc.json', JSON.stringify(db, null, '  '))
   await runGetiPlayer()
