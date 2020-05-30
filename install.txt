@@ -78,3 +78,5 @@ path
 subtitles
 exif.directory
 
+sudo apt install fonts-freefont-ttf
+

@@ -139,9 +139,9 @@ async function run() {
           if (omx) omx.stdin.write('q')
           const { path, subtitles } = result.value
           if (subtitles) {
-            omx = spawn('/usr/bin/omxplayer.bin', ['-b', '-o', 'hdmi', `--subtitles=${subtitles}`, `${path}`])
+            omx = spawn('/usr/bin/omxplayer', [`--subtitles=${subtitles}`, path])
           } else {
-            omx = spawn('/usr/bin/omxplayer.bin', ['-b', '-o', 'hdmi', `${path}`])
+            omx = spawn('/usr/bin/omxplayer', [path])
           }
           omx.once('exit', function () {
             omx = null
