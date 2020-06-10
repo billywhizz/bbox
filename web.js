@@ -29,9 +29,7 @@ async function run() {
     const { path, size, name, pid, meta } = v
     const record = { path, size, name, pid }
     record.name = meta.name
-    record.brand = meta.brand
     record.tags = meta.categories ? meta.categories.toLowerCase() : ''
-    record.category = meta.category ? meta.category.toLowerCase() : ''
     record.channel = meta.channel
     record.duration = meta.duration
     record.description = meta.desc

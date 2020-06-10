@@ -1,10 +1,13 @@
 let db
 
-let vpos = 0 // vertical position on grid
+let vpos = 1 // vertical position on grid
 let itemsPerPage = 8 // max items to display per page
 let page = 0 // page of results we are on
 let pages = 0
 let pending = []
+let spPage
+let containers = []
+let inHeader = false
 
 function highlight(v) {
   document.body.children[vpos].style.background = 'rgba(0, 0, 0, 0.6)'
@@ -19,17 +22,37 @@ function poll() {
   return v
 }
 
+function enterHeader () {
+  document.body.children[vpos].style.background = 'rgba(0, 0, 0, 0.6)'
+  console.log('header')
+  inHeader = true
+}
+
+function exitHeader () {
+  inHeader = false
+}
+
 function up() {
-  if (vpos === 0) {
-    highlight(itemsPerPage - 1)
+  if (inHeader) {
+    exitHeader()
+    highlight(itemsPerPage)
+    return
+  }
+  if (vpos === 1) {
+    enterHeader()
     return
   }
   highlight(vpos - 1)
 }
 
 function down() {
-  if (vpos === itemsPerPage - 1) {
-    highlight(0)
+  if (inHeader) {
+    exitHeader()
+    highlight(1)
+    return
+  }
+  if (vpos === itemsPerPage) {
+    enterHeader()
     return
   }
   highlight(vpos + 1)
@@ -61,35 +84,33 @@ function select() {
 }
 
 function playVideo (path) {
-  window.location.href = `${window.location.origin}${path}`
+  window.location.href = `${window.location.origin}/play${path}`
 }
 
 function displayPage() {
   for (let i = 0; i < itemsPerPage; i++) {
     const index = (page * itemsPerPage) + i
-    const div = document.body.children[i]
+    const div = containers[i]
     const spTitle = div.children[0]
     const spSubTitle = div.children[1]
     const anchor = div.children[2]
     const thumb = anchor.children[0]
     const spDesc = div.children[3]
     const spChannel = div.children[4]
-    const spCategory = div.children[5]
-    const spTags = div.children[6]
-    const spBroadcast = div.children[7]
-    const spDuration = div.children[8]
+    const spTags = div.children[5]
+    const spBroadcast = div.children[6]
+    const spDuration = div.children[7]
     if (index > db.length -1) {
       spTitle.innerText = ''
       spSubTitle.innerText = ''
       thumb.style.display = 'none'
       spDesc.innerText = ''
-      spCategory.innerText = ''
       spChannel.innerText = ''
       spTags.innerText = ''
       spBroadcast.innerText = ''
       spDuration.innerText = ''
     } else {
-      const { name, size, path, brand, duration, tags, category, channel, description, episode, broadcast, title, thumbnail } = db[index]
+      const { name, path, duration, tags, channel, description, episode, broadcast, title, thumbnail } = db[index]
       anchor.onclick = () => playVideo(path)
       if (episode) {
         spTitle.innerText = `${name}`
@@ -109,11 +130,6 @@ function displayPage() {
         spDesc.innerText = description
       } else {
         spDesc.innerText = ''
-      }
-      if (category) {
-        spCategory.innerText = category
-      } else {
-        spCategory.innerText = ''
       }
       if (channel) {
         spChannel.innerText = channel
@@ -137,15 +153,32 @@ function displayPage() {
       }
     }
   }
-  const spPage = document.body.children[itemsPerPage]
   spPage.innerText = `${page + 1} / ${pages}`
   localStorage.setItem("page", page)
 }
 
 function setupScreen() {
   document.body.innerHTML = ""
-  const itemHeight = Math.floor((window.innerHeight - 64) / itemsPerPage) - 8
+  const itemHeight = 118
+  itemsPerPage = Math.floor((window.innerHeight - 64) / (itemHeight + 8))
+  pages = Math.ceil(db.length / itemsPerPage)
+  //const itemHeight = Math.floor((window.innerHeight - 64) / itemsPerPage) - 8
   let top = 64
+  containers = []
+
+  const div = document.createElement('div')
+  div.style.color = 'white'
+  div.style.position = 'absolute'
+  div.style.left = '16px'
+  div.style.right = '16px'
+  div.style.top = '8px'
+  div.style.height = `48px`
+  div.style.background = 'rgba(0, 0, 0, 0.6)'
+  div.style.textOverflow = 'ellipsis'
+  div.style.overflow = 'hidden'
+  div.style.whiteSpace = 'nowrap'
+  document.body.appendChild(div)
+
   for (let i = 0; i < itemsPerPage; i++) {
     const div = document.createElement('div')
     div.style.color = 'white'
@@ -159,6 +192,7 @@ function setupScreen() {
     div.style.overflow = 'hidden'
     div.style.whiteSpace = 'nowrap'
     document.body.appendChild(div)
+    containers.push(div)
 
     const spTitle = document.createElement('span')
     spTitle.style.position = 'absolute'
@@ -216,15 +250,6 @@ function setupScreen() {
     spChannel.style.textAlign = 'right'
     div.appendChild(spChannel)
 
-    const spCategory = document.createElement('span')
-    spCategory.style.position = 'absolute'
-    spCategory.style.right = '188px'
-    spCategory.style.width = '180px'
-    spCategory.style.top = '8px'
-    spCategory.style.fontSize = '24px'
-    spCategory.style.textAlign = 'right'
-    div.appendChild(spCategory)
-
     const spTags = document.createElement('span')
     spTags.style.position = 'absolute'
     spTags.style.left = '200px'
@@ -235,7 +260,7 @@ function setupScreen() {
 
     const spBroadcast = document.createElement('span')
     spBroadcast.style.position = 'absolute'
-    spBroadcast.style.right = '360px'
+    spBroadcast.style.right = '400px'
     spBroadcast.style.width = '180px'
     spBroadcast.style.top = '8px'
     spBroadcast.style.fontSize = '24px'
@@ -254,22 +279,32 @@ function setupScreen() {
     top += itemHeight + 8
   }
 
-  const spPage = document.createElement('div')
+  spPage = document.createElement('div')
   spPage.style.position = 'absolute'
-  spPage.style.right = '16px'
-  spPage.style.top = '8px'
+  spPage.style.right = '24px'
+  spPage.style.top = '12px'
   spPage.style.fontSize = '32px'
   spPage.style.textAlign = 'right'
   spPage.style.color = 'white'
   document.body.appendChild(spPage)
+
+  spTime = document.createElement('div')
+  spTime.style.position = 'absolute'
+  spTime.style.left = '24px'
+  spTime.style.top = '12px'
+  spTime.style.fontSize = '32px'
+  spTime.style.textAlign = 'left'
+  spTime.style.color = 'white'
+  spTime.innerText = getTime()
+  document.body.appendChild(spTime)
 }
 
 function loadProgrammes(json) {
   db = json
-  vpos = parseInt(localStorage.getItem("vpos") || 0, 10)
-  page = parseInt(localStorage.getItem("page") || 0, 10)
-  pages = Math.ceil(db.length / itemsPerPage)
   setupScreen()
+  vpos = parseInt(localStorage.getItem("vpos") || 0, 10)
+  if (vpos > itemsPerPage) vpos = 1
+  page = parseInt(localStorage.getItem("page") || 0, 10)
   displayPage()
   highlight(vpos)
 }
@@ -286,21 +321,20 @@ function loadJSON(file, callback) {
   rawFile.send(null);
 }
 
-let backgrounds = ['universe.jpg', 'nasa.jpg', 'sunrise.jpg', 'milky-way.jpg', 'milky-way2.jpg']
-let currentBackground = 0
-
-function changeBackground() {
-  if (currentBackground == backgrounds.length - 1) {
-    currentBackground = 0
-  }
-  document.body.style.backgroundImage = `url('${backgrounds[currentBackground++]}')`
-}
-
 const keyEvents = { 'ArrowUp': up, 'ArrowDown': down, 'ArrowLeft': left, 'ArrowRight': right }
 document.addEventListener('keyup', e => {
   if (keyEvents[e.key]) keyEvents[e.key]()
 })
 
-//setInterval(() => changeBackground(), 10000)
-
 const load = () => loadJSON("bbc.json", json => loadProgrammes(json))
+
+function getTime () {
+  const now = new Date()
+  const hours = now.getHours()
+  const minutes = now.getMinutes()
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
+}
+setInterval(() => {
+  if (spTime) spTime.innerText = getTime()
+}, 10000)
+window.onresize = () => load()

@@ -11,7 +11,7 @@ let omx
 let cec
 let timer
 
-const chromePath = '/usr/bin/chromium-browser'
+const chromePath = process.env.CHROMEPATH || '/usr/bin/chromium-browser'
 const startingUrl = `file://${join(__dirname, 'web', 'index.html')}`
 console.log(startingUrl)
 
@@ -168,7 +168,7 @@ async function run() {
     process.on('SIGTERM', () => shutdown())
     process.on('SIGINT', () => shutdown())
 
-    app.listen(8080, '0.0.0.0', () => {
+    https.listen(8443, '0.0.0.0', () => {
       console.log('Server is up...')
     });
 
@@ -180,7 +180,14 @@ async function run() {
   }
 }
 
+const certs = require('./certs.json')
+const tlsOptions = {
+  key: certs.privkey,
+  cert: certs.cert
+}
+
 const app = express()
+const https = require('https').createServer(tlsOptions, app)
 
 app.use(express.static(path.join(__dirname, 'web')))
 
@@ -188,8 +195,18 @@ app.get('*', (req, res) => {
   const videoFilePath = req.path
   const fileSize = fs.statSync(videoFilePath).size
   const { range } = req.headers
+  if (!range) {
+    res.append('Content-Length', fileSize)
+    res.append('Content-Type', 'video/mp4')
+    res.status(200)
+    const fileStream = fs.createReadStream(videoFilePath)
+    fileStream.pipe(res)
+    return
+  }
   let start = 0
   let end = fileSize - 1
+  console.log(req.path)
+  console.dir(req.headers)
   if (range) {
     const [s, e] = range.replace('bytes=', '').split('-')
     start = Number(s)
