@@ -20,6 +20,7 @@
     "byline": "^5.0.0",
     "chrome-launcher": "^0.13.2",
     "chrome-remote-interface": "^0.28.2",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "rocksdb": "^4.1.0"
   }
 }
