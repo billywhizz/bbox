@@ -192,7 +192,7 @@ const https = require('https').createServer(tlsOptions, app)
 app.use(express.static(path.join(__dirname, 'web')))
 
 app.get('*', (req, res) => {
-  const videoFilePath = req.path
+  const videoFilePath = req.path.replace('/play', '')
   const fileSize = fs.statSync(videoFilePath).size
   const { range } = req.headers
   if (!range) {

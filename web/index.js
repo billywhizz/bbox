@@ -79,7 +79,7 @@ function right() {
 }
 
 function select() {
-  const index = (page * itemsPerPage) + vpos
+  const index = (page * itemsPerPage) + (vpos - 1)
   pending = db[index]
 }
 
@@ -299,8 +299,15 @@ function setupScreen() {
   document.body.appendChild(spTime)
 }
 
+function isMP4 (path) {
+  return path.split('.').slice(-1)[0] === 'mp4'
+}
+
 function loadProgrammes(json) {
   db = json
+  if (window.location.host === 'home.billywhizz.io') {
+    db = json.filter(v => isMP4(v.path))
+  }
   setupScreen()
   vpos = parseInt(localStorage.getItem("vpos") || 0, 10)
   if (vpos > itemsPerPage) vpos = 1

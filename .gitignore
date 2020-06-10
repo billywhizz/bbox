@@ -9,3 +9,5 @@ Default
 bbc.txt
 package-lock.json
 config
+certs.json
+*.tar.gz

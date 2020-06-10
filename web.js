@@ -31,7 +31,11 @@ async function run() {
     record.name = meta.name
     record.tags = meta.categories ? meta.categories.toLowerCase() : ''
     record.channel = meta.channel
-    record.duration = exif.duration
+    record.duration = 0
+    if (exif && exif.duration) {
+      const [h, m, s] = exif.duration.split(':').map(v => parseInt(v, 10))
+      record.duration = (h * 60 * 60) + (m * 60) + s
+    }
     record.description = meta.desc
     record.episode = meta.episode === '-' ? null: meta.episode
     record.broadcast = meta.firstbcastdate
