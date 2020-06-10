@@ -26,12 +26,12 @@ async function run() {
     }
   }
   bbc = Object.keys(pids).map(v => pids[v]).map(v => {
-    const { path, size, name, pid, meta } = v
+    const { path, size, name, pid, meta, exif } = v
     const record = { path, size, name, pid }
     record.name = meta.name
     record.tags = meta.categories ? meta.categories.toLowerCase() : ''
     record.channel = meta.channel
-    record.duration = meta.duration
+    record.duration = exif.duration
     record.description = meta.desc
     record.episode = meta.episode === '-' ? null: meta.episode
     record.broadcast = meta.firstbcastdate
