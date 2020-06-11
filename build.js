@@ -34,21 +34,21 @@ async function loadIfExists(fileName, format = 'json') {
 }
 
 function exifTool(path) {
-	const script = `exiftool ${path}`
-	return new Promise((ok, fail) => {
-		const child = spawn('/bin/sh', [ '-c', script ])
+  const script = `exiftool ${path}`
+  return new Promise((ok, fail) => {
+    const child = spawn('/bin/sh', ['-c', script])
     const chunks = []
-		child.stdout.on('data', data => chunks.push(data.toString('utf8')))
-		child.on('close', code => {
-			if (code !== 0) fail(new Error(`Bad Return Code: ${code}`))
+    child.stdout.on('data', data => chunks.push(data.toString('utf8')))
+    child.on('close', code => {
+      if (code !== 0) fail(new Error(`Bad Return Code: ${code}`))
       const text = chunks.join('')
       const exif = {}
       text.split('\n').map(parseLine).filter(v => v.length).forEach(v => {
         exif[v[0].replace(rxExif, '_').toLowerCase()] = v[1]
       })
-			ok(exif)
-		})
-	})
+      ok(exif)
+    })
+  })
 }
 
 function killGetiPlayer() {
@@ -183,7 +183,7 @@ async function generate(path, homeDir, db) {
               if (xml) {
                 console.error(`getting pid from xml: ${xmlPath}`)
                 record.pid = await getPIDFromXML(xmlPath)
-              } else {  
+              } else {
                 xmlPath = join(homeDir, `.bbc/${name}.xml`)
                 xml = await loadIfExists(xmlPath, 'xml')
                 if (xml) {
@@ -220,7 +220,7 @@ async function generate(path, homeDir, db) {
 }
 
 async function run(args) {
-  const [ homeDir ] = args
+  const [homeDir] = args
   let db = await loadIfExists('./bbc.json')
   if (!db) db = {}
   await generate(homeDir, homeDir, db)

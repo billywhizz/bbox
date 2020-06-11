@@ -28,7 +28,7 @@ const chromeFlags = [
   '--fast',
   '--fast-start',
   '--disable-infobars',
-//  '--check-for-update-interval=604800',
+  //  '--check-for-update-interval=604800',
   '--check-for-update-interval=1',
   '--simulate-critical-update',
   '--disable-restore-session-state',
@@ -46,44 +46,44 @@ function initCEC(protocol) {
     console.log('[' + data.id + '] changed from ' + data.from + ' to ' + data.to)
   })
   cec.on('key', async data => {
-    switch(data.name) {
+    switch (data.name) {
       case 'pause':
       case 'play':
-        if(omx) omx.stdin.write('p')
+        if (omx) omx.stdin.write('p')
         break
       case 'stop':
-        if(omx) omx.stdin.write('q')      
+        if (omx) omx.stdin.write('q')
         break
       case 'select':
-        if(omx) {
+        if (omx) {
           omx.stdin.write('s')
         } else {
           await Runtime.evaluate({ expression: 'select()', awaitPromise: true, returnByValue: true })
         }
         break
       case 'up':
-        if(omx) {
+        if (omx) {
           omx.stdin.write('+')
         } else {
           await Runtime.evaluate({ expression: 'up()', awaitPromise: true, returnByValue: true })
         }
         break
       case 'down':
-        if(omx) {
+        if (omx) {
           omx.stdin.write('-')
         } else {
           await Runtime.evaluate({ expression: 'down()', awaitPromise: true, returnByValue: true })
         }
         break
       case 'left':
-        if(omx) {
+        if (omx) {
           omx.stdin.write('\x17[D')
         } else {
           await Runtime.evaluate({ expression: 'left()', awaitPromise: true, returnByValue: true })
         }
         break
       case 'right':
-        if(omx) {
+        if (omx) {
           omx.stdin.write('\x17[C')
         } else {
           await Runtime.evaluate({ expression: 'right()', awaitPromise: true, returnByValue: true })
@@ -113,7 +113,7 @@ async function run() {
       port: 9222,
       chromePath,
       startingUrl,
-      envVars: { DISPLAY: ':0' }, 
+      envVars: { DISPLAY: ':0' },
       chromeFlags,
       handleSIGINT: false,
       ignoreDefaultFlags: true
@@ -176,7 +176,7 @@ async function run() {
     if (client) client.close()
     if (launcher) launcher.kill()
     clearTimeout(timer)
-    throw(err)
+    throw (err)
   }
 }
 
