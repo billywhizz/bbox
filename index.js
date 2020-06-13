@@ -28,7 +28,6 @@ const chromeFlags = [
   '--fast',
   '--fast-start',
   '--disable-infobars',
-  //  '--check-for-update-interval=604800',
   '--check-for-update-interval=1',
   '--simulate-critical-update',
   '--disable-restore-session-state',
@@ -189,7 +188,7 @@ const tlsOptions = {
 const app = express()
 const https = require('https').createServer(tlsOptions, app)
 
-app.use(express.static(path.join(__dirname, 'web')))
+app.use(express.static(path.join(__dirname, 'external')))
 
 app.get('*', (req, res) => {
   const videoFilePath = req.path.replace('/play', '')

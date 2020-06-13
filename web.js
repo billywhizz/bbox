@@ -49,6 +49,7 @@ async function run() {
   })
   bbc.sort(sortByTitle)
   await writeFileAsync(join(__dirname, './web/bbc.json'), JSON.stringify(bbc))
+  await writeFileAsync(join(__dirname, './external/bbc.json'), JSON.stringify(bbc))
 }
 
 run().catch(err => console.error(err))

@@ -3,6 +3,7 @@ scratch
 downloads
 bbc.json
 web/bbc.json
+external/bbc.json
 *.log
 Cache
 Default
