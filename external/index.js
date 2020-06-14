@@ -6,9 +6,9 @@
 
   var $scope = {
       filters: {
-          music: false,
-          drama: false,
-          factual: false
+          music: true,
+          drama: true,
+          factual: true
       }
   }
 
@@ -72,7 +72,7 @@
               widgets.appendChild(btnMusic)
 
               var btnDrama = this.btnDrama = document.createElement("a")
-              if($scope.filters.cinema) {
+              if($scope.filters.drama) {
                 btnDrama.className = "btn btn-lg kwlButton btnDrama btnDramaOn"
               }
               else {
@@ -173,12 +173,7 @@
                   next = 0
                   while (numItems--) {
                       item = document.createElement("div")
-                      if (silver) {
-                          item.className = "listItem listItemFirst"
-                      }
-                      else {
-                          item.className = "listItem listItemSecond"
-                      }
+                      item.className = "listItem"
                       item.style.height = $config.ui.itemHeight
                       silver = !silver
                       item.style.top = top
@@ -231,8 +226,8 @@
 
   function applyFilters() {
       $scope.programmes = $scope._programmes.filter(function(programme) {
-          //if($scope.filters[event.category]) return true
-          return true
+          const { tags } = programme
+          return tags.some(tag => $scope.filters[tag])
       })
   }
 

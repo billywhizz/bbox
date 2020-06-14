@@ -8,8 +8,8 @@ icons/144.png
 icons/196.png
 icons/48.png
 icons/72.png
-index.html
-index.js
+#index.html
+#index.js
 browserconfig.xml
 manifest.json
 https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css

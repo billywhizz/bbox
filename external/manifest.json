@@ -3,11 +3,11 @@
     "short_name": "(bbox)",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#FDFF5B",
+    "background_color": "#000000",
     "description": "(bbox) bbc player",
     "lang": "en-GB",
     "orientation": "portrait-primary",
-    "theme_color": "#FDFF5B",
+    "theme_color": "#F54997",
     "icons": [
         {
             "src": "\/icons/48.png",

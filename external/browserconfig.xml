@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<browserconfig><msapplication><tile><square70x70logo src="/icons/ms-icon-70x70.png"/><square150x150logo src="/icons/ms-icon-150x150.png"/><square310x310logo src="/icons/ms-icon-310x310.png"/><TileColor>#FDFF5B</TileColor></tile></msapplication></browserconfig>
+<browserconfig><msapplication><tile><square72x72logo src="/icons/72.png"/><square144x144logo src="/icons/144.png"/><square196x196logo src="/icons/196.png"/><TileColor>#F54997</TileColor></tile></msapplication></browserconfig>

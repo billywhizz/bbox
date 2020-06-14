@@ -29,7 +29,7 @@ async function run() {
     const { path, size, name, pid, meta, exif } = v
     const record = { path, size, name, pid }
     record.name = meta.name
-    record.tags = meta.categories ? meta.categories.toLowerCase() : ''
+    record.tags = meta.categories ? meta.categories.toLowerCase().split(',') : ''
     record.channel = meta.channel
     record.duration = 0
     if (exif && exif.duration) {
