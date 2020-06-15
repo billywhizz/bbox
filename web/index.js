@@ -24,7 +24,7 @@ function poll() {
 
 function enterHeader () {
   document.body.children[vpos].style.background = 'rgba(0, 0, 0, 0.6)'
-  console.log('header')
+  document.body.children[0].style.backgroundColor = '#f54997'
   inHeader = true
 }
 
@@ -79,6 +79,7 @@ function right() {
 }
 
 function select() {
+  if (inHeader) return load()
   const index = (page * itemsPerPage) + (vpos - 1)
   pending = db[index]
 }
@@ -299,15 +300,8 @@ function setupScreen() {
   document.body.appendChild(spTime)
 }
 
-function isMP4 (path) {
-  return path.split('.').slice(-1)[0] === 'mp4'
-}
-
 function loadProgrammes(json) {
   db = json
-  if (window.location.host === 'home.billywhizz.io') {
-    db = json.filter(v => isMP4(v.path))
-  }
   setupScreen()
   vpos = parseInt(localStorage.getItem("vpos") || 0, 10)
   if (vpos > itemsPerPage) vpos = 1
@@ -344,4 +338,8 @@ function getTime () {
 setInterval(() => {
   if (spTime) spTime.innerText = getTime()
 }, 10000)
-window.onresize = () => load()
+
+window.onresize = () => {
+  if (json) return loadProgrammes(json)
+  load()
+}

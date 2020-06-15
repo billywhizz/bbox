@@ -104,6 +104,20 @@
               sp.className = "glyphicon glyphicon-globe"
               btnFactual.appendChild(sp)
               widgets.appendChild(btnFactual)
+
+              var btnClose = this.btnClose = document.createElement("a")
+              btnClose.className = "btn btn-lg kwlButton btnClose"
+              btnClose.onclick = function () {
+                player.src = ''
+                player.style.display = 'none'
+                player.style.visibility = 'hidden'
+                btnClose.style.display = 'none'
+              }
+              sp = document.createElement("span")
+              sp.className = "glyphicon glyphicon-remove"
+              btnClose.appendChild(sp)
+              widgets.appendChild(btnClose)
+
           }
       },
       programmeList: null
@@ -238,7 +252,18 @@
   }
 
   function playVideo (path) {
-    window.location.href = `${window.location.origin}/play${path}`
+    player.src = `${window.location.origin}/play${path}`
+    player.style.position = 'absolute'
+    player.style.left = '0px'
+    player.style.right = '0px'
+    player.style.bottom = '0px'
+    player.style.width = '100%'
+    player.style.display = 'block'
+    player.style.visibility = 'visible'
+    player.style.maxHeight = '300px'
+    player.style.zIndex = 1000
+    controller.window.btnClose.style.display = 'block'
+    player.play()
   }
 
   function bootstrap() {

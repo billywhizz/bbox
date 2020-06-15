@@ -141,6 +141,12 @@
             top: 8px;
             left: 60px;
         }
+        a.btnClose {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            display: none;
+        }
         a.btnDramaOn {
             background-color: black;
             color: white;
@@ -166,6 +172,10 @@
             overflow: hidden;
             z-index: 1000;
         }
+        video#player {
+          display: none;
+          visibility: hidden;
+        }
     </style>
     <title>(bbox)</title>
 </head>
@@ -173,5 +183,6 @@
     <div id="mainForm">
         <div id="widgets"></div>
     </div>
+    <video id="player" controls muted></video>
 </body>
 </html>
