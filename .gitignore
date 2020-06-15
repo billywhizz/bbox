@@ -12,3 +12,4 @@ package-lock.json
 config
 certs.json
 *.tar.gz
+users.json
