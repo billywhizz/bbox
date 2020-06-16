@@ -155,7 +155,7 @@ function requestHandler (req, res) {
       return
     }
     const fileSize = stats.size
-    if (fileSize < 1 || fileSize > (4 * 1024 * 1024 * 1024)) {
+    if (fileSize < 1 || fileSize > (6 * 1024 * 1024 * 1024)) {
       res.status(400)
       res.end()
       return
