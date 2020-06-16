@@ -190,6 +190,24 @@ function requestHandler (req, res) {
   }
 }
 
+function loggerMiddleware (req, res, next) {
+  const { path, headers, method, socket } = req
+  const address = socket.address()
+  const { remoteAddress, remoteFamily, remotePort } = socket
+  const info = { address: { local: address, remote: { port: remotePort, family: remoteFamily, address: remoteAddress } }, path, headers, method }
+  res.setHeader('Cache-Control', 'private, max-age=3600')
+  res.setHeader('Strict-Transport-Security', 'max-age=63072000; preload; includeSubDomains')
+  //res.setHeader('Strict-Transport-Security', 'max-age=0; preload')
+  res.setHeader('X-Frame-Options', 'DENY')
+  res.setHeader('Feature-Policy', 'none')
+  res.setHeader('X-Content-Type-Options', 'nosniff')
+  res.setHeader('Referrer-Policy', 'no-referrer')
+  res.removeHeader("X-Powered-By")
+  res.setHeader('Content-Security-Policy', "frame-ancestors 'none'; font-src 'self'; form-action 'none'; base-uri 'none'; default-src 'none'; img-src 'self' data: https://ichef.bbci.co.uk; script-src 'self'; object-src 'none'; style-src 'self'; connect-src 'self'; media-src 'self'")
+  console.log(JSON.stringify(info, null, '  '))
+  next()
+}
+
 function authMiddleware (users) {
   function authenticateRequest (req, res, next) {
     const { headers } = req
@@ -276,7 +294,33 @@ async function run() {
   const users = require('./users.json')
   const tlsOptions = {
     key: certs.privkey,
-    cert: `${certs.cert}\n${certs.chain}`
+    cert: `${certs.cert}\n${certs.chain}`,
+    ciphers: [
+      "TLS_AES_256_GCM_SHA384",
+      "ECDHE-RSA-AES256-SHA384",
+      "DHE-RSA-AES256-SHA384",
+      "ECDHE-RSA-AES256-SHA256",
+      "DHE-RSA-AES256-SHA256",
+      "ECDHE-RSA-AES128-SHA256",
+      "DHE-RSA-AES128-SHA256",
+      "HIGH",
+      "!aNULL",
+      "!eNULL",
+      "!EXPORT",
+      "!DES",
+      "!RC4",
+      "!MD5",
+      "!PSK",
+      "!SRP",
+      "!CAMELLIA"
+    ].join(':')
+  }
+
+  async function startchrome () {
+    chrome = await launch(chromePath, startingUrl, chromeFlags)
+    launcher = chrome.launcher
+    client = chrome.client
+    page = chrome.page
   }
 
   function shutdown(err) {
@@ -297,13 +341,11 @@ async function run() {
   try {
     process.on('SIGTERM', () => shutdown())
     process.on('SIGINT', () => shutdown())
-    chrome = await launch(chromePath, startingUrl, chromeFlags)
-    launcher = chrome.launcher
-    client = chrome.client
-    page = chrome.page
+    await startchrome()
     cec = initCEC(client)
     app = express()
     https = require('https').createServer(tlsOptions, app)
+    app.use(loggerMiddleware)
     app.use(authMiddleware(users))
     app.use(express.static(path.join(__dirname, 'external')))
     app.get('*', requestHandler)

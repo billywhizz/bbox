@@ -1,0 +1,227 @@
+body {
+  font-family: "Helvetica Neue", "Calibri Light", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 0.02em;
+  background-color: #625e5e;
+}
+.kwlButton {
+  color: black;
+  background-color: #f54997;
+  border-color: none;
+  padding: 4px 4px 4px 4px;
+  font-size: 28px;
+}
+div#widgets {
+  z-index: 100;
+  position: absolute;
+  background-color: #f54997;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: block;
+  border-bottom: 4px solid black;
+}
+div#detail {
+  padding: 8px;
+  max-width: 500px;
+  position: absolute;
+  top: 60px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  display: none;
+  background-color: #f54997;
+}
+div.detailName {
+  color: white;
+  font-weight: bold;
+  font-size: 24px;
+}
+div.detailEpisode {
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+}
+div.detailDesc {
+  color: white;
+  font-size: 16px;
+}
+div.detailDuration {
+  position: absolute;
+  right: 8px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+}
+image.thumbBig {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+}
+div.programmeList {
+  z-index: 80;
+  position: absolute;
+  background-color: #e0e0e0;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0px;
+  display: none;
+  overflow: auto;
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+div.programmeList::-webkit-scrollbar {
+display: none;
+}
+/* Hide scrollbar for IE and Edge */
+div.programmeList {
+-ms-overflow-style: none;
+}
+span.kwlCategoryDrama {
+  color: white;
+  background-color: black;
+  border: 2px solid black;
+}
+span.kwlCategoryMusic {
+  color: white;
+  background-color: black;
+  border: 2px solid black;
+}
+span.kwlCategoryFactual {
+  color: white;
+  background-color: black;
+  border: 2px solid black;
+}
+div.listItem {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  height: 70px;
+  background-color: white;
+  border-bottom: 1px solid #f0f0f0;
+}
+img.logo {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  bottom: 0px;
+  height: 70px;
+  width: 124px;
+  border: 0px;
+}
+div.name {
+  position: absolute;
+  left: 132px;
+  top: 1px;
+  font-size: 14px;
+}
+div.episode {
+  position: absolute;
+  left: 132px;
+  bottom: 1px;
+  font-weight: normal;
+  font-size: 14px;
+}
+div.count {
+  font-size: 14pt;
+  font-weight: bold;
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  right: 8px;
+  left: 8px;
+  text-align: center;
+}
+div.duration {
+  position: absolute;
+  left: 74px;
+  width: 50px;
+  text-align: right;
+  color: white;
+  background-color: black;
+  bottom: 0px;
+  font-weight: normal;
+  font-size: 16px;
+}
+a.btnMusic {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  bottom: 8px;
+}
+a.btnMusicOn {
+  background-color: black;
+  color: white;
+}
+a.btnDrama {
+  position: absolute;
+  top: 8px;
+  left: 60px;
+  bottom: 8px;
+}
+a.btnClose {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: none;
+}
+a.btnDramaOn {
+  background-color: black;
+  color: white;
+}
+a.btnFactual {
+  position: absolute;
+  top: 8px;
+  left: 110px;
+  bottom: 8px;
+}
+a.btnFactualOn {
+  background-color: black;
+  color: white;
+}
+a.btnStar {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  bottom: 8px;
+}
+a.btnStarOn {
+  background-color: black;
+  color: white;
+}
+a.btnStarSmall {
+  color: black;
+  background-color: white;
+  position: absolute;
+  right: 8px;
+  bottom: 0px;
+  padding: 2px 2px 2px 2px;
+  font-size: 20px;
+}
+a.btnDetailSmall {
+  color: black;
+  background-color: white;
+  position: absolute;
+  right: 58px;
+  bottom: 0px;
+  padding: 2px 2px 2px 2px;
+  font-size: 20px;
+}
+div#mainForm {
+  position: absolute;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  overflow: hidden;
+  z-index: 1000;
+}
+video#player {
+  display: none;
+  visibility: hidden;
+}
