@@ -159,6 +159,7 @@
     const name = detail.getElementsByClassName('detailName')[0]
     const episode = detail.getElementsByClassName('detailEpisode')[0]
     const desc = detail.getElementsByClassName('detailDesc')[0]
+    const descLong = detail.getElementsByClassName('detailDescLong')[0]
     const thumb = detail.getElementsByClassName('detailThumb')[0]
     const duration = detail.getElementsByClassName('detailDuration')[0]
     const image = thumb.children[0]
@@ -167,7 +168,12 @@
     desc.innerText = programme.description
     image.src = programme.thumbnail
     duration.innerText = `${Math.ceil(programme.duration / 60)} m`
-    playVideo(programme.path, false)
+    descLong.innerText = programme.longDescription
+    if (programme.notfound) {
+      controller.window.btnClose.style.display = 'block'
+    } else {
+      playVideo(programme.path, false)
+    }
   }
 
   function createProgrammeList() {
@@ -263,6 +269,11 @@
                       item.update = function(programme) {
                           if(this.style.display === "none") this.style.display = "block"
                           programmeList.itemHash[programme.pid] = item
+                          if (programme.notfound) {
+                            this.style.backgroundColor = 'silver'
+                          } else {
+                            this.style.backgroundColor = 'white'
+                          }
                           this.logo.src = programme.thumbnail
                           if (programme.episode) {
                             this.name.innerText = `${programme.name}: ${programme.episode}`
@@ -313,6 +324,7 @@
   }
 
   function isMP4 (path) {
+    return true
     return path.split('.').slice(-1)[0] === 'mp4'
   }
 

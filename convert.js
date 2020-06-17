@@ -57,20 +57,23 @@ async function run () {
   for (const key of keys) {
     const record = bbc[key]
     const { path, size, name, pid, exif, info, meta } = record
+    if (path.substring(0, 12) === '/media/edge1') continue
     if (extname(path) === '.flv') {
       const start = Date.now()
       const newFileName = path.replace('.flv', '.mp4')
       console.log(`converting ${path} to ${newFileName}`)
       await convert(path, newFileName)
-      record.exif = await exifTool(newFileName)
+      //record.exif = await exifTool(newFileName)
       record.path = newFileName
       delete record.info
+      //console.log(JSON.stringify(record, null, '  '))
       await unlinkAsync(path)
       delete bbc[path]
       bbc[newFileName] = record
       await writeFileAsync('./bbc.json', JSON.stringify(bbc))
       const elapsed = Math.floor((Date.now() - start) / 10) / 100
       console.log(`${newFileName} converted in ${elapsed} seconds`)
+      //break
     }
   }
   await writeFileAsync('./bbc.json', JSON.stringify(bbc))

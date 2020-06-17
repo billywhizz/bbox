@@ -48,6 +48,12 @@ div.detailDesc {
   color: white;
   font-size: 16px;
 }
+div.detailDescLong {
+  padding-top: 16px;
+  background-color: white;
+  color: black;
+  font-size: 14px;
+}
 div.detailDuration {
   position: absolute;
   right: 8px;

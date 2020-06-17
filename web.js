@@ -15,18 +15,28 @@ async function run() {
   const text = await readFileAsync(fileName)
   let bbc = JSON.parse(text)
   const pids = {}
+  let notfound = 0
   for (const key of Object.keys(bbc)) {
     const { path } = bbc[key]
-    if (path.indexOf('/media/blue1/') > -1) {
+    bbc[key].notfound = false
+    if (path.indexOf('/media/seagate/') > -1) {
       pids[bbc[key].pid] = bbc[key]
-    } else if (path.indexOf('/media/seagate/') > -1) {
-      pids[bbc[key].pid] = bbc[key]
+    } else if (path.indexOf('/media/blue1/') > -1) {
+      if (!pids[bbc[key].pid]) pids[bbc[key].pid] = bbc[key]
     } else if (path.indexOf('/media/disk2/') > -1) {
       if (!pids[bbc[key].pid]) pids[bbc[key].pid] = bbc[key]
+    } else {
+      if (!pids[bbc[key].pid]) {
+        pids[bbc[key].pid] = bbc[key]
+        bbc[key].notfound = true
+      }
+      console.log(`Not Found: ${path}`)
+      notfound++
     }
   }
+  console.log(`Total Not Found: ${notfound}`)
   bbc = Object.keys(pids).map(v => pids[v]).map(v => {
-    const { path, size, name, pid, meta, exif } = v
+    const { path, size, name, pid, meta, exif, notfound } = v
     const record = { path, size, name, pid }
     record.name = meta.name
     record.tags = meta.categories ? meta.categories.toLowerCase().split(',') : ''
@@ -37,9 +47,11 @@ async function run() {
       record.duration = (h * 60 * 60) + (m * 60) + s
     }
     record.description = meta.desc
+    record.longDescription = meta.desclong
     record.episode = meta.episode === '-' ? null : meta.episode
     record.broadcast = meta.firstbcastdate
     record.title = meta.title || ''
+    record.notfound = notfound
     if (record.episode) {
       record.title = `${record.name} / ${record.episode}`
     }
