@@ -7,10 +7,18 @@ const { spawn } = require('child_process')
 
 const bbc = require('./bbc.json')
 
-const pids = Object.keys(bbc).map(key => bbc[key].pid).reduce((keys, v) => {
-  keys[v] = true
-  return keys
-}, {})
+const pids = {}
+Object.keys(bbc).forEach(key => {
+  const programme = bbc[key]
+  const { path } = programme
+  if (path.indexOf('/media/seagate/') > -1) {
+    pids[programme.pid] = true
+  } else if (path.indexOf('/media/blue1/') > -1) {
+    if (!pids[programme.pid]) pids[programme.pid] = true
+  } else if (path.indexOf('/media/disk2/') > -1) {
+    if (!pids[programme.pid]) pids[programme.pid] = true
+  }
+})
 
 const homeDir = '/media/seagate/bbc'
 const pwd = join(__dirname, './')
