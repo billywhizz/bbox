@@ -338,7 +338,23 @@
     const starred = JSON.parse(localStorage.getItem('/starred') || '{}')
     $scope.programmes = $scope._programmes.filter(function(programme) {
       if (filters.star && !starred[programme.pid]) return false
-      return programme.tags.some(tag => filters[tag])
+      if (!programme.tags.some(tag => {
+        if (tag === 'documentaries') tag = 'factual'
+        if (tag === 'films') tag = 'drama'
+        if (tag === 'comedy') tag = 'drama'
+        if (tag === 'sport') tag = 'drama'
+        if (tag === 'news') tag = 'factual'
+        if (tag === 'entertainment') tag = 'drama'
+        if (tag === 'entertainment & comedy') tag = 'drama'
+        if (tag === 'get_iplayer') tag = 'drama'
+        if (tag === 'sitcoms') tag = 'drama'
+        if (tag === 'spoof') tag = 'drama'
+        if (tag === 'learning') tag = 'factual'
+        return filters[tag]
+      })) {
+        return false
+      }
+      return true
     })
   }
 
