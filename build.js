@@ -229,7 +229,7 @@ async function run(args) {
   await sleep(5000)
   for (const path of Object.keys(db)) {
     const record = db[path]
-    if (record.pid && !record.info) {
+    if (record.pid && !record.meta) {
       console.log(`getting info for ${record.pid}`)
       record.info = await getInfo(record.pid)
       record.meta = {}
