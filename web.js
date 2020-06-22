@@ -60,13 +60,13 @@ async function run() {
     return record
   })
   bbc.sort(sortByTitle)
-  //await writeFileAsync(join(__dirname, './web/bbc.json'), JSON.stringify(bbc.filter(v => !v.notfound)))
   for (let i = 0; i < bbc.length; i += 1000) {
     let page = Math.floor(i / 1000)
     console.log(page)
     console.log(i)
     await writeFileAsync(join(__dirname, `./external/bbc.${page}.json`), JSON.stringify(bbc.slice(i, i + 1000)))
   }
+  await writeFileAsync(join(__dirname, './web/bbc.json'), JSON.stringify(bbc.filter(v => !v.notfound)))
 }
 
 run().catch(err => console.error(err))

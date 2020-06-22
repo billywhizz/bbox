@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>bbox personal player</title>
+    <script src="/index2.js" async></script>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -10,8 +11,6 @@
     <meta name="apple-mobile-web-app-capable" content="yes"/>
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="stylesheet" href="/bootstrap.min.css">
-    <script src="/jquery-3.5.1.min.js"></script>    
-    <script src="/index.js" async></script>
     <link rel="apple-touch-icon" sizes="48x48" href="/icons/48.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/icons/72.png">
     <link rel="apple-touch-icon" sizes="100x100" href="/icons/100.png">
@@ -30,16 +29,26 @@
 </head>
 <body>
     <div id="mainForm">
-        <div id="widgets"></div>
-    </div>
-    <div id="detail">
-      <div class="detailName"></div>
-      <div class="detailEpisode"></div>
-      <div class="detailThumb"><img class="thumbBig" src="#"></img></div>
-      <div class="detailDesc"></div>
-      <div class="detailDescLong"></div>
-      <div class="detailDuration"></div>
-      <video id="player" controls muted></video>
+      <div id="widgets">
+        <div class="count" id="divCount"></div>
+        <a id="btnDrama" class="btn btn-lg kwlButton btnDrama"><span class="glyphicon glyphicon-film"></span></a>
+        <a id="btnMusic" class="btn btn-lg kwlButton btnMusic"><span class="glyphicon glyphicon-music"></span></a>
+        <a id="btnFactual" class="btn btn-lg kwlButton btnFactual"><span class="glyphicon glyphicon-globe"></span></a>
+        <a id="btnStar" class="btn btn-lg kwlButton btnStar"><span class="glyphicon glyphicon-star"></span></a>
+        <a id="btnClose" class="btn btn-lg kwlButton btnClose"><span class="glyphicon glyphicon-remove"></span></a>
+      </div>
+      <div id="programmeList" class="programmeList"></div>
+      <div id="detail">
+        <div class="detailName"></div>
+        <div class="detailThumb">
+          <img class="thumbBig" src="#"></img>
+          <div class="detailDesc"></div>
+        </div>
+        <div class="detailEpisode"></div>
+        <div class="detailDescLong"></div>
+        <div class="detailDuration"></div>
+        <video id="player" controls muted></video>
+      </div>
     </div>
 </body>
 </html>
