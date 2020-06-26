@@ -1,12 +1,18 @@
 const { readFile, writeFile, readdir, stat } = require('fs')
 const { promisify } = require('util')
-const { join } = require('path')
+const { join, extname } = require('path')
 const readFileAsync = promisify(readFile)
 const writeFileAsync = promisify(writeFile)
 
-function sortByTitle(a, b) {
+function sortByTitle (a, b) {
   if (a.title.toLowerCase() < b.title.toLowerCase()) return -1
   if (a.title.toLowerCase() > b.title.toLowerCase()) return 1
+  return 0
+}
+
+function sortByBroadcast (a, b) {
+  if (a.broadcast.getTime() < b.broadcast.getTime()) return -1
+  if (a.broadcast.getTime() > b.broadcast.getTime()) return 1
   return 0
 }
 
@@ -49,7 +55,7 @@ async function run() {
     record.description = meta.desc
     record.longDescription = meta.desclong
     record.episode = meta.episode === '-' ? null : meta.episode
-    record.broadcast = meta.firstbcastdate
+    record.broadcast = new Date(meta.firstbcast)
     record.title = meta.title || ''
     record.notfound = notfound
     if (record.episode) {
@@ -59,13 +65,15 @@ async function run() {
     record.thumbnail = meta.thumbnail
     return record
   })
-  bbc.sort(sortByTitle)
+  bbc = bbc.filter(v => (extname(v.path) === '.mp4'))
+  bbc.sort(sortByBroadcast)
   for (let i = 0; i < bbc.length; i += 1000) {
     let page = Math.floor(i / 1000)
     console.log(page)
     console.log(i)
     await writeFileAsync(join(__dirname, `./external/bbc.${page}.json`), JSON.stringify(bbc.slice(i, i + 1000)))
   }
+  bbc.sort(sortByTitle)
   await writeFileAsync(join(__dirname, './web/bbc.json'), JSON.stringify(bbc.filter(v => !v.notfound)))
 }
 

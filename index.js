@@ -12,11 +12,11 @@ function initCEC (protocol) {
   const { Runtime } = protocol
   const cec = new NodeCEC()
   cec.on('ready', function (data) {
-    console.error('cec.ready')
+    console.log('cec.ready')
   })
   cec.on('status', function (data) {
-    console.error('cec.ready')
-    console.error('[' + data.id + '] changed from ' + data.from + ' to ' + data.to)
+    console.log('cec.ready')
+    console.log('[' + data.id + '] changed from ' + data.from + ' to ' + data.to)
   })
   cec.on('key', async data => {
     switch (data.name) {
@@ -65,7 +65,7 @@ function initCEC (protocol) {
     }
   })
   cec.on('close', function (code) {
-    console.error('cec.close')
+    console.log('cec.close')
     setTimeout(() => {
       initCEC(protocol)
     }, 1000)
