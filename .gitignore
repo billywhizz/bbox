@@ -13,3 +13,6 @@ config
 certs.json
 *.tar.gz
 users.json
+.vscode
+bbc.*.json
+tmp
